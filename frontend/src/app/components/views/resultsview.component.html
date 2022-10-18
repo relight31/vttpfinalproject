@@ -1,0 +1,10 @@
+<p>resultsview works!</p>
+<p *ngIf="rates.length == 0">Exchange rate data not available</p>
+<ngx-charts-line-chart
+  *ngIf="!!rates.length"
+  [results]="rates"
+  [legend]="legend"
+  [showXAxisLabel]="showXAxisLabel"
+  [showYAxisLabel]="showYAxisLabel"
+  [timeline]="timeline"
+></ngx-charts-line-chart>
