@@ -17,7 +17,7 @@ export class IndexviewComponent implements OnInit {
 
   submit() {
     // submit form to backend
-    // get MAS exchange rates
+    // get exchange rates
     // get listings for this exchange
     // navigate to result page
     this.router.navigate(["/results"])
