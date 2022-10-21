@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RateDataSeries } from 'src/app/models';
 import { ExchangeratesService } from 'src/app/services/exchangerates.service';
@@ -9,10 +9,19 @@ import { ExchangeratesService } from 'src/app/services/exchangerates.service';
   styleUrls: ['./resultsview.component.css'],
 })
 export class ResultsviewComponent implements OnInit, OnDestroy {
-  rates!: RateDataSeries[];
+  rates: RateDataSeries[] = [];
   rateSub$!: Subscription;
+  currFrom!: string;
+  currTo!: string;
+  currSub$!: Subscription;
+  public get width() {
+    return window.innerWidth;
+  }
 
   // chart options
+  view: [number, number] = [this.width, 400];
+  xAxisLabel: string = 'Date';
+  yAxisLabel: string = 'Rate';
   legend: boolean = true;
   showLabels: boolean = true;
   animations: boolean = true;
@@ -20,23 +29,28 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
   yAxis: boolean = true;
   showYAxisLabel: boolean = false;
   showXAxisLabel: boolean = false;
-  // xAxisLabel: string = 'Products';
-  // yAxisLabel: string = 'Sales';
   timeline: boolean = true;
+  autoScale: boolean = true;
   colorScheme = {
-    domain: ['#704FC4', '#4B852C', '#B67A3D'],
+    domain: ['#704FC4'],
   };
 
   constructor(private rateSvc: ExchangeratesService) {}
 
   ngOnInit(): void {
-    console.log('>>>>> subscribing to rates from rate Service')
+    console.log('>>>>> subscribing to rates from rate Service');
     this.rateSub$ = this.rateSvc.onGetRates.subscribe((data) => {
       this.rates = data;
+    });
+    this.currSub$ = this.rateSvc.onGetCurrencies.subscribe((data) => {
+      console.log('>>>> currencies: ' + data[0] + data[1]);
+      this.currFrom = data[0];
+      this.currTo = data[1];
     });
   }
 
   ngOnDestroy(): void {
     this.rateSub$.unsubscribe();
+    this.currSub$.unsubscribe();
   }
 }

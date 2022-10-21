@@ -1,12 +1,12 @@
 <p>indexview works!</p>
 <form [formGroup]="form" (ngSubmit)="submit()">
-  <select name="currFrom">
-    <option value="sgd">SGD</option>
-    <option value="myr">MYR</option>
+  <select name="currFrom" formControlName="currFrom">
+    <option value="SGD">SGD</option>
+    <option value="MYR">MYR</option>
   </select>
-  <select name="currTo">
-    <option value="sgd">SGD</option>
-    <option value="myr">MYR</option>
+  <select name="currTo" formControlName="currTo">
+    <option value="SGD">SGD</option>
+    <option value="MYR">MYR</option>
   </select>
   <button type="submit">Go</button>
 </form>

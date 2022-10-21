@@ -6,6 +6,7 @@ import { RateDataSeries } from '../models';
 @Injectable()
 export class ExchangeratesService {
   onGetRates = new Subject<RateDataSeries[]>();
+  onGetCurrencies = new Subject<string[]>();
 
   constructor(private http: HttpClient) {}
 
@@ -15,6 +16,11 @@ export class ExchangeratesService {
       .set('currFrom', currFrom)
       .set('currTo', currTo);
 
+    // put currencies into event
+    const temp = [currFrom, currTo];
+    console.log(temp);
+    // this.onGetCurrencies.next(temp);
+
     // put results into event
     firstValueFrom(
       this.http.get<any>('/api/rates', { params }).pipe(
@@ -22,6 +28,7 @@ export class ExchangeratesService {
           console.log('>>>>> in tap');
           console.log(result);
           this.onGetRates.next(result);
+          this.onGetCurrencies.next(temp);
         })
       )
     );

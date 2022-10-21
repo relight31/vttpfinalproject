@@ -1,10 +1,19 @@
-<p>resultsview works!</p>
-<p *ngIf="rates.length == 0">Exchange rate data not available</p>
+<h1>Historical Exchange Rates for {{ currFrom }} to {{ currTo }}</h1>
+<p *ngIf="rates == null || rates.length == 0">
+  Exchange rate data not available
+</p>
 <ngx-charts-line-chart
   *ngIf="!!rates.length"
+  [view]="view"
   [results]="rates"
   [legend]="legend"
+  [xAxisLabel]="xAxisLabel"
+  [yAxisLabel]="yAxisLabel"
   [showXAxisLabel]="showXAxisLabel"
   [showYAxisLabel]="showYAxisLabel"
   [timeline]="timeline"
+  [xAxis]="xAxis"
+  [yAxis]="yAxis"
+  [autoScale]="autoScale"
 ></ngx-charts-line-chart>
+<h1>Listings</h1>

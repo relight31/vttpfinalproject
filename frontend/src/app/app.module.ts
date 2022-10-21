@@ -11,6 +11,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ExchangeratesService } from './services/exchangerates.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MaterialModule } from './material.module';
+import { ListingService } from './services/listing.service';
 
 const routes: Routes = [
   { path: '', component: IndexviewComponent },
@@ -34,8 +36,9 @@ const routes: Routes = [
     NgxChartsModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(routes, { useHash: true }),
+    MaterialModule,
   ],
-  providers: [ExchangeratesService],
+  providers: [ExchangeratesService, ListingService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
