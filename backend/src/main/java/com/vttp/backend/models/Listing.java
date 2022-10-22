@@ -94,11 +94,11 @@ public class Listing {
 
     public JsonObject toJsonObject() {
         return Json.createObjectBuilder()
-                .add("listing_id", listingId)
+                .add("listingId", listingId)
                 .add("title", title)
-                .add("user_id", userId)
-                .add("curr_from", currFrom)
-                .add("curr_to", currTo)
+                .add("userId", userId)
+                .add("currFrom", currFrom)
+                .add("currTo", currTo)
                 .add("rate", rate)
                 .add("description", description)
                 .add("username", username)

@@ -19,7 +19,6 @@ public class ListingRepository {
     @Autowired
     private JdbcTemplate template;
 
-    // TODO create listingsview in DB
     private final String SQL_GET_LISTING_BY_ID = "select * from listingsview where listing_id=?";
     private final String SQL_GET_LISTINGS_BY_CURR = "select * from listingsview where curr_from =? and curr_to = ?";
 
@@ -43,10 +42,11 @@ public class ListingRepository {
                 SQL_GET_LISTINGS_BY_CURR,
                 currFrom,
                 currTo);
-        if (rowSet.next()) {
+        logger.info("rowSet retrieved from DB");
+        while (rowSet.next()) {
             listings.add(Listing.fromRowset(rowSet));
-            rowSet.next();
         }
+        logger.info("returning list of " + listings.size() + " listings");
         return listings;
     }
 }

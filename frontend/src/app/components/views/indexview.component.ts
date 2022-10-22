@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ExchangeratesService } from 'src/app/services/exchangerates.service';
+import { ListingService } from 'src/app/services/listing.service';
 
 @Component({
   selector: 'app-indexview',
@@ -13,7 +14,8 @@ export class IndexviewComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private rateSvc: ExchangeratesService
+    private rateSvc: ExchangeratesService,
+    private listingSvc: ListingService
   ) {}
 
   ngOnInit(): void {
@@ -27,10 +29,14 @@ export class IndexviewComponent implements OnInit {
         ' currto: ' +
         this.form.value.currTo
     );
+    const currFrom = this.form.value.currFrom;
+    const currTo = this.form.value.currTo;
+
     // submit form to backend
-    this.rateSvc.getDailyRate(this.form.value.currFrom, this.form.value.currTo);
     // get exchange rates
+    this.rateSvc.getDailyRate(currFrom, currTo);
     // get listings for this exchange
+    this.listingSvc.getAllListings(currFrom, currTo);
     // navigate to result page
     this.router.navigate(['/results']);
   }

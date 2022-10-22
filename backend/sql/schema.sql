@@ -75,3 +75,16 @@ create table messages(
         foreign key(chat_id)
         references chats(chat_id)
 );
+
+create view listingsview as
+	select l.listing_id,
+    l.title,
+    ui.user_id,
+    ui.username,
+    l.curr_from,
+    l.curr_to,
+    l.rate,
+    l.description
+    from listings l, userinfo ui, users u
+    where u.user_id = ui.user_id
+    and l.user_id = u.user_id;

@@ -1,7 +1,8 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { RateDataSeries } from 'src/app/models';
+import { Listing, RateDataSeries } from 'src/app/models';
 import { ExchangeratesService } from 'src/app/services/exchangerates.service';
+import { ListingService } from 'src/app/services/listing.service';
 
 @Component({
   selector: 'app-resultsview',
@@ -11,9 +12,14 @@ import { ExchangeratesService } from 'src/app/services/exchangerates.service';
 export class ResultsviewComponent implements OnInit, OnDestroy {
   rates: RateDataSeries[] = [];
   rateSub$!: Subscription;
+
   currFrom!: string;
   currTo!: string;
   currSub$!: Subscription;
+
+  listings: Listing[] = [];
+  listingSub$!: Subscription;
+
   public get width() {
     return window.innerWidth;
   }
@@ -22,7 +28,7 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
   view: [number, number] = [this.width, 400];
   xAxisLabel: string = 'Date';
   yAxisLabel: string = 'Rate';
-  legend: boolean = true;
+  legend: boolean = false;
   showLabels: boolean = true;
   animations: boolean = true;
   xAxis: boolean = true;
@@ -35,7 +41,10 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
     domain: ['#704FC4'],
   };
 
-  constructor(private rateSvc: ExchangeratesService) {}
+  constructor(
+    private rateSvc: ExchangeratesService,
+    private listingSvc: ListingService
+  ) {}
 
   ngOnInit(): void {
     console.log('>>>>> subscribing to rates from rate Service');
@@ -47,10 +56,18 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
       this.currFrom = data[0];
       this.currTo = data[1];
     });
+    this.listingSub$ = this.listingSvc.onGetListings.subscribe((data) => {
+      this.listings = data;
+    });
   }
 
   ngOnDestroy(): void {
     this.rateSub$.unsubscribe();
     this.currSub$.unsubscribe();
+    this.listingSub$.unsubscribe();
+  }
+
+  logListing() {
+    console.log(this.listings);
   }
 }
