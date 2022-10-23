@@ -39,4 +39,8 @@ export class ListingService {
         )
     );
   }
+
+  addToFavourites(listingId: number) {}
+
+  getFavourites(){}
 }

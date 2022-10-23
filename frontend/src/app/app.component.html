@@ -1,6 +1,33 @@
 <mat-toolbar>
-    <span [routerLink]="['/']">My application</span>
-    <span class="toolbar-spacer"></span>
+  <span [routerLink]="['/']">My application</span>
+  <span class="toolbar-spacer"></span>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
     <mat-icon>account_circle</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <form (click)="$event.stopPropagation()" [formGroup]="form">
+      <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="Your username here"
+          formControlName="username"
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          type="password"
+          placeholder="Your password here"
+          formControlName="password"
+        />
+      </mat-form-field>
+      <br />
+      <button mat-button>Login</button>
+      <button mat-button>Sign Up</button>
+    </form>
+  </mat-menu>
 </mat-toolbar>
 <router-outlet></router-outlet>

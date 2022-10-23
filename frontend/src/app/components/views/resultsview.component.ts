@@ -40,6 +40,9 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
   colorScheme = {
     domain: ['#704FC4'],
   };
+  referenceLines: any[] = [];
+  showRefLines: boolean = true;
+  // TODO reference lines onMouseover for listings
 
   constructor(
     private rateSvc: ExchangeratesService,
@@ -67,7 +70,20 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
     this.listingSub$.unsubscribe();
   }
 
-  logListing() {
-    console.log(this.listings);
+  onMouseOver(listing: Listing) {
+    console.log('mouseover!');
+    this.referenceLines = [
+      {
+        name: listing.title + ' by ' + listing.username,
+        value: listing.rate,
+      },
+    ];
+    console.log(this.referenceLines);
+  }
+
+  onMouseOut() {
+    console.log('mouseout!');
+    this.referenceLines = [];
+    console.log(this.referenceLines);
   }
 }

@@ -43,9 +43,10 @@ public class ListingController {
             arrayBuilder.add(listing.toJsonObject());
         }
         JsonArray result = arrayBuilder.build();
-        if (result.size()>0) {
+        if (result.size() > 0) {
             return ResponseEntity.ok(result.toString());
         } else {
+            logger.info("No results retrieved from service");
             return ResponseEntity.badRequest().build();
         }
     }
@@ -57,6 +58,7 @@ public class ListingController {
             Listing listing = opt.get();
             return ResponseEntity.ok(listing.toJsonObject().toString());
         } else {
+            logger.info("Unable to retrieve specific listing " + listingId);
             return ResponseEntity.badRequest().build();
         }
     }

@@ -11,6 +11,10 @@ import { ListingService } from 'src/app/services/listing.service';
 })
 export class IndexviewComponent implements OnInit {
   form!: FormGroup;
+  currencies: string[]=[
+    'SGD',
+    'MYR'
+  ]
   constructor(
     private fb: FormBuilder,
     private router: Router,
