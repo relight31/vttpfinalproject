@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom, Subject, tap } from 'rxjs';
 import { RateDataSeries } from '../models';
@@ -15,6 +15,10 @@ export class ExchangeratesService {
     const params = new HttpParams()
       .set('currFrom', currFrom)
       .set('currTo', currTo);
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      'Bearer ' + sessionStorage.getItem('token')
+    );
 
     // put currencies into event
     const temp = [currFrom, currTo];
@@ -23,14 +27,16 @@ export class ExchangeratesService {
 
     // put results into event
     firstValueFrom(
-      this.http.get<any>('/api/rates', { params }).pipe(
-        tap((result) => {
-          console.log('>>>>> in tap');
-          console.log(result);
-          this.onGetRates.next(result);
-          this.onGetCurrencies.next(temp);
-        })
-      )
+      this.http
+        .get<any>('/api/rates', { params: params, headers: headers })
+        .pipe(
+          tap((result) => {
+            console.log('>>>>> in tap');
+            console.log(result);
+            this.onGetRates.next(result);
+            this.onGetCurrencies.next(temp);
+          })
+        )
     );
   }
 }

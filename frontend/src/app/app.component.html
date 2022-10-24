@@ -5,7 +5,15 @@
     <mat-icon>account_circle</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <form (click)="$event.stopPropagation()" [formGroup]="form">
+    <div *ngIf="isLoggedIn()">
+      <button (click)="logout()">Logout</button>
+    </div>
+    <form
+      (click)="$event.stopPropagation()"
+      [formGroup]="form"
+      *ngIf="!isLoggedIn()"
+      (ngSubmit)="submitLogin()"
+    >
       <mat-form-field>
         <mat-label>Username</mat-label>
         <input
@@ -25,7 +33,7 @@
         />
       </mat-form-field>
       <br />
-      <button mat-button>Login</button>
+      <button mat-button type="submit">Login</button>
       <button mat-button>Sign Up</button>
     </form>
   </mat-menu>

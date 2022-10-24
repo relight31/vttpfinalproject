@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom, Subject, tap } from 'rxjs';
 import { Listing } from '../models';
@@ -15,21 +15,33 @@ export class ListingService {
     const params = new HttpParams()
       .set('currFrom', currFrom)
       .set('currTo', currTo);
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      'Bearer ' + sessionStorage.getItem('token')
+    );
     // put results into event
     firstValueFrom(
-      this.http.get<Listing[]>('/api/listings', { params }).pipe(
-        tap((result) => {
-          console.log('>>>>> in tap');
-          this.onGetListings.next(result);
-        })
-      )
+      this.http
+        .get<Listing[]>('/api/listings', { params: params, headers: headers })
+        .pipe(
+          tap((result) => {
+            console.log('>>>>> in tap');
+            this.onGetListings.next(result);
+          })
+        )
     );
   }
 
   getListingById(listingId: number) {
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      'Bearer ' + sessionStorage.getItem('token')
+    );
     firstValueFrom(
       this.http
-        .get<Listing>(['/api/listing/', listingId.toString()].join(''))
+        .get<Listing>(['/api/listing/', listingId.toString()].join(''), {
+          headers,
+        })
         .pipe(
           tap((result) => {
             console.log('>>>>> in tap');
@@ -42,5 +54,5 @@ export class ListingService {
 
   addToFavourites(listingId: number) {}
 
-  getFavourites(){}
+  getFavourites() {}
 }
