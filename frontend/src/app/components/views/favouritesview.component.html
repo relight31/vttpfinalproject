@@ -1,0 +1,26 @@
+<h1>Favourites</h1>
+
+<div>
+  <p *ngIf="favourites.length == 0">No favourites saved. Add one now!</p>
+  <mat-card
+    *ngFor="let l of favourites; let i = index"
+    [ngClass]="cardClass()"
+    (mouseenter)="onMouseOver()"
+    (mouseleave)="onMouseOut()"
+  >
+    <mat-card-header>
+      <mat-card-title>{{ l.title }}</mat-card-title>
+      <mat-card-subtitle>{{ l.currFrom }} to {{ l.currTo }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <h2>Rate: {{ l.rate }}</h2>
+      <p>{{ l.description }}</p>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button (click)="removeFavourite(l.listingId)">
+        <mat-icon>favorite</mat-icon> Unsave
+      </button>
+      <button mat-button><mat-icon>chat</mat-icon> Chat</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

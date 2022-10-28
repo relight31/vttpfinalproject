@@ -88,3 +88,17 @@ create view listingsview as
     from listings l, userinfo ui, users u
     where u.user_id = ui.user_id
     and l.user_id = u.user_id;
+
+create view favouritesview as
+    select l.listing_id,
+    l.title,
+    ui.user_id,
+    ui.username,
+    l.curr_from,
+    l.curr_to,
+    l.rate,
+    l.description
+    from favourites f, listings l, userinfo ui, users u
+    where f.user_id = u.user_id
+    and u.user_id = ui.user_id
+    and l.user_id = u.user_id;

@@ -1,4 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { Listing, RateDataSeries } from 'src/app/models';
 import { ExchangeratesService } from 'src/app/services/exchangerates.service';
@@ -42,11 +43,11 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
   };
   referenceLines: any[] = [];
   showRefLines: boolean = true;
-  // TODO reference lines onMouseover for listings
 
   constructor(
     private rateSvc: ExchangeratesService,
-    private listingSvc: ListingService
+    private listingSvc: ListingService,
+    private _snackbar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -85,5 +86,19 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
     console.log('mouseout!');
     this.referenceLines = [];
     console.log(this.referenceLines);
+  }
+
+  cardClass() {
+    if (this.referenceLines.length) {
+      return 'card-mouseover mat-card';
+    } else {
+      return 'mat-card';
+    }
+  }
+
+  addFavourite(listingId: number) {
+    this.listingSvc.addToFavourites(listingId);
+    console.log('adding listingId: ' + listingId + ' to favourites');
+    this._snackbar.open('Added to Favourites!', 'Close', { duration: 1000 });
   }
 }

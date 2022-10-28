@@ -13,15 +13,22 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MaterialModule } from './material.module';
 import { ListingService } from './services/listing.service';
 import { LoginService } from './services/login.service';
+import { FavouritesviewComponent } from './components/views/favouritesview.component';
 
 const routes: Routes = [
   { path: '', component: IndexviewComponent },
   { path: 'results', component: ResultsviewComponent },
+  { path: 'favourites', component: FavouritesviewComponent },
   { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
 
 @NgModule({
-  declarations: [AppComponent, IndexviewComponent, ResultsviewComponent],
+  declarations: [
+    AppComponent,
+    IndexviewComponent,
+    ResultsviewComponent,
+    FavouritesviewComponent,
+  ],
   imports: [
     BrowserModule,
     FormsModule,

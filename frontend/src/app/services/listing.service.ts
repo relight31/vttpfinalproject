@@ -7,6 +7,7 @@ import { Listing } from '../models';
 export class ListingService {
   onGetListings = new Subject<Listing[]>();
   onGetListingById = new Subject<Listing>();
+  onGetFavourites = new Subject<Listing[]>();
 
   constructor(private http: HttpClient) {}
 
@@ -52,7 +53,65 @@ export class ListingService {
     );
   }
 
-  addToFavourites(listingId: number) {}
+  addToFavourites(listingId: number) {
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      'Bearer ' + sessionStorage.getItem('token')
+    );
+    // username + account get from backend
+    firstValueFrom(
+      this.http
+        .post<Listing[]>('/api/addFavourite/' + listingId, '', {
+          headers: headers,
+        })
+        .pipe(
+          tap((result) => {
+            console.log('>>>>> in tap');
+            console.log('>>>>> favourites: ' + result);
+            // push to event
+            this.onGetFavourites.next(result);
+          })
+        )
+    );
+  }
 
-  getFavourites() {}
+  getFavourites() {
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      'Bearer ' + sessionStorage.getItem('token')
+    );
+    // username + account get from backend
+    firstValueFrom(
+      this.http.get<Listing[]>('/api/getFavourites', { headers: headers }).pipe(
+        tap((result) => {
+          console.log('>>>>> in tap');
+          console.log('>>>>> favourites: ' + result);
+          // push to event
+          this.onGetFavourites.next(result);
+        })
+      )
+    );
+  }
+
+  removeFromFavourites(listingId: number) {
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      'Bearer ' + sessionStorage.getItem('token')
+    );
+    // username + account get from backend
+    firstValueFrom(
+      this.http
+        .delete<Listing[]>('/api/deleteFavourite/' + listingId, {
+          headers: headers,
+        })
+        .pipe(
+          tap((result) => {
+            console.log('>>>>> in tap');
+            console.log('>>>>> favourites: ' + result);
+            // push to event
+            this.onGetFavourites.next(result);
+          })
+        )
+    );
+  }
 }

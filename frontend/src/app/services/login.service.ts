@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { firstValueFrom, tap } from 'rxjs';
+import { catchError, firstValueFrom, tap, throwError } from 'rxjs';
 
 @Injectable()
 export class LoginService {
@@ -18,6 +18,12 @@ export class LoginService {
           if (result) {
             sessionStorage.setItem('token', result);
           }
+        }),
+        catchError((error) => {
+          console.log('error caught in login service');
+          console.error(error);
+          // TODO error message on failed login
+          return throwError(error);
         })
       )
     );

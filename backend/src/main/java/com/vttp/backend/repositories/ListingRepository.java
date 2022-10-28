@@ -22,6 +22,12 @@ public class ListingRepository {
     private final String SQL_GET_LISTING_BY_ID = "select * from listingsview where listing_id=?";
     private final String SQL_GET_LISTINGS_BY_CURR = "select * from listingsview where curr_from =? and curr_to = ?";
 
+    private final String SQL_GET_FAVOURITES_BY_USERNAME = "select * from favouritesview where username = ?";
+    private final String SQL_ADD_FAVOURITE = "insert into favourites (user_id, listing_id) values (?,?)";
+    private final String SQL_DELETE_FAVOURITE = "delete from favourites where favourite_id = ?";
+    private final String SQL_GET_FAV_ID = "select * from favourites where user_id = ? and listing_id = ?";
+    private final String SQL_IS_IN_FAVOURITES = "select * from favouritesview where username = ? and listing_id = ?";
+
     public Optional<Listing> getListingById(int listingId) {
         SqlRowSet rowSet = template.queryForRowSet(
                 SQL_GET_LISTING_BY_ID,
@@ -48,5 +54,42 @@ public class ListingRepository {
         }
         logger.info("returning list of " + listings.size() + " listings");
         return listings;
+    }
+
+    public boolean isInFavourites(int listingId, String username) {
+        SqlRowSet rowSet = template.queryForRowSet(
+                SQL_IS_IN_FAVOURITES,
+                username,
+                listingId);
+        return rowSet.next();
+    }
+
+    public List<Listing> getFavourites(String username) {
+        List<Listing> favourites = new LinkedList<>();
+        SqlRowSet rowSet = template.queryForRowSet(SQL_GET_FAVOURITES_BY_USERNAME,
+                username);
+        logger.info("rowSet retrieved from DB");
+        while (rowSet.next()) {
+            favourites.add(Listing.fromRowset(rowSet));
+        }
+        logger.info("returning list of " + favourites.size() + " favourites");
+        return favourites;
+    }
+
+    public boolean addFavourite(int listingId, int userId) {
+        return template.update(SQL_ADD_FAVOURITE,
+                userId,
+                listingId) == 1;
+    }
+
+    public boolean removeFavourite(int listingId, int userId) {
+        // get primary key favourite_id first
+        SqlRowSet rowSet = template.queryForRowSet(SQL_GET_FAV_ID,
+                userId,
+                listingId);
+        rowSet.next(); // exception here if not found
+        int favouriteId = rowSet.getInt("favourite_id");
+        logger.info("favourite_id: " + favouriteId);
+        return template.update(SQL_DELETE_FAVOURITE, favouriteId) == 1;
     }
 }

@@ -23,6 +23,7 @@
   <p *ngIf="listings.length == 0">Listings not available</p>
   <mat-card
     *ngFor="let l of listings; let i = index"
+    [ngClass]="cardClass()"
     (mouseenter)="onMouseOver(l)"
     (mouseleave)="onMouseOut()"
   >
@@ -35,7 +36,9 @@
       <p>{{ l.description }}</p>
     </mat-card-content>
     <mat-card-actions align="end">
-      <button mat-button><mat-icon>favorite</mat-icon> Save</button>
+      <button mat-button (click)="addFavourite(l.listingId)">
+        <mat-icon>favorite</mat-icon> Save
+      </button>
       <button mat-button><mat-icon>chat</mat-icon> Chat</button>
     </mat-card-actions>
   </mat-card>
