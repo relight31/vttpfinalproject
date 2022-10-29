@@ -18,10 +18,22 @@ import { ProfileviewComponent } from './components/views/profileview.component';
 import { UserInfoService } from './services/userinfo.service';
 
 const routes: Routes = [
-  { path: '', component: IndexviewComponent },
-  { path: 'results', component: ResultsviewComponent },
-  { path: 'favourites', component: FavouritesviewComponent },
-  { path: 'myprofile', component: ProfileviewComponent },
+  { path: '', component: IndexviewComponent, title: 'CurrencyFlip - Index' },
+  {
+    path: 'results',
+    component: ResultsviewComponent,
+    title: 'CurrencyFlip - Search results',
+  },
+  {
+    path: 'favourites',
+    component: FavouritesviewComponent,
+    title: 'CurrencyFlip - My Favourites',
+  },
+  {
+    path: 'myprofile',
+    component: ProfileviewComponent,
+    title: 'CurrencyClip - My Profile',
+  },
   { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
 

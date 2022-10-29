@@ -1,8 +1,8 @@
-.file-input {
-  display: none;
-}
 .profile-pic {
   border-radius: 50%;
   max-width: 50vw;
   max-width: 50vw;
+}
+.no-display {
+  display: none;
 }

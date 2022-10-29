@@ -4,12 +4,28 @@
   alt="Profile pic for {{ myInfo.username }}"
   class="profile-pic"
 />
-<button mat-icon-button>
+<button mat-icon-button (click)="fileInput.click()">
   <mat-icon>add_a_photo</mat-icon>
 </button>
-<p>profile pic form</p>
-<form>
-  <input type="file" class="file-input" />
+<form (ngSubmit)="onSubmitPhoto()">
+  <input
+    type="file"
+    class="no-display"
+    (change)="onFileSelected($event)"
+    accept="image/*"
+    #fileInput
+  />
+  <div>
+    <span>{{ fileName }}</span>
+    <button
+      mat-button
+      [disabled]="!fileName"
+      [ngClass]="hideButton()"
+      type="submit"
+    >
+      Upload!
+    </button>
+  </div>
 </form>
 <h2>Username: {{ myInfo.username }}</h2>
 <h2>Joined: {{ myInfo.dateJoined }}</h2>

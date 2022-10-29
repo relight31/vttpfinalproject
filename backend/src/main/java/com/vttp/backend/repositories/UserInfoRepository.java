@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
-
 import com.vttp.backend.models.UserInfo;
 
 @Repository
@@ -20,6 +19,7 @@ public class UserInfoRepository {
     private JdbcTemplate template;
 
     private final String SQL_USERINFO_FROM_USERNAME = "select * from userinfo where username = ?";
+    private final String SQL_UPDATE_PROFILE_PIC = "update userinfo set profile_pic = ? where userinfo_id = ?";
 
     public int userIdFromUsername(String username) throws UsernameNotFoundException {
         SqlRowSet rowSet = template.queryForRowSet(
@@ -44,5 +44,11 @@ public class UserInfoRepository {
             logger.info("User: " + username + " not found");
             return Optional.empty();
         }
+    }
+
+    public boolean updateProfilePic(String path, int userInfoId) {
+        return template.update(SQL_UPDATE_PROFILE_PIC,
+                path,
+                userInfoId) == 1;
     }
 }

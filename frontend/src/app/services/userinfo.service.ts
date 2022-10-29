@@ -23,4 +23,24 @@ export class UserInfoService {
       )
     );
   }
+
+  submitPhoto(formData: FormData) {
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      'Bearer ' + sessionStorage.getItem('token')
+    );
+    firstValueFrom(
+      this.http
+        .post<UserInfo>('/api/myprofile/uploadphoto', formData, {
+          headers: headers,
+        })
+        .pipe(
+          tap((result) => {
+            console.log('>>>>> in tap');
+            console.log(result);
+            this.onGetOwnInfo.next(result);
+          })
+        )
+    );
+  }
 }

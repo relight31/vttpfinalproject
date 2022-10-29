@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.vttp.backend.models.UserInfo;
 import com.vttp.backend.services.UserService;
@@ -40,6 +43,29 @@ public class UserController {
             return ResponseEntity.ok(userInfo.toJsonObject().toString());
         } else {
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping(path = "/myprofile/uploadphoto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> uploadPhoto(
+            @RequestPart("profilepic") MultipartFile photo,
+            Principal principal) {
+        String username = principal.getName();
+        try {
+            String imagePath = userSvc.uploadPhoto(photo, username);
+            logger.info("Successfully uploaded image to " + imagePath);
+            // update userinfo table
+            if (userSvc.updateProfilePic(imagePath, username)) {
+                logger.info("Successfully updated userinfo record for user: " + username);
+                // return entire userinfo object
+                return getUserInfo(username);
+            } else {
+                logger.info("Could not update userinfo record for user: " + username);
+                throw new RuntimeException();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
         }
     }
 }
