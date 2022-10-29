@@ -18,7 +18,7 @@ create table userinfo(
     userinfo_id int auto_increment not null,
     user_id int,
     username varchar(45),
-    profile_pic varchar(128),
+    profile_pic varchar(128) default '',
     date_joined date,
     primary key(userinfo_id),
 

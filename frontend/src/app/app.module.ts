@@ -14,11 +14,14 @@ import { MaterialModule } from './material.module';
 import { ListingService } from './services/listing.service';
 import { LoginService } from './services/login.service';
 import { FavouritesviewComponent } from './components/views/favouritesview.component';
+import { ProfileviewComponent } from './components/views/profileview.component';
+import { UserInfoService } from './services/userinfo.service';
 
 const routes: Routes = [
   { path: '', component: IndexviewComponent },
   { path: 'results', component: ResultsviewComponent },
   { path: 'favourites', component: FavouritesviewComponent },
+  { path: 'myprofile', component: ProfileviewComponent },
   { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
 
@@ -28,6 +31,7 @@ const routes: Routes = [
     IndexviewComponent,
     ResultsviewComponent,
     FavouritesviewComponent,
+    ProfileviewComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,7 +43,12 @@ const routes: Routes = [
     RouterModule.forRoot(routes, { useHash: true }),
     MaterialModule,
   ],
-  providers: [ExchangeratesService, ListingService, LoginService],
+  providers: [
+    ExchangeratesService,
+    ListingService,
+    LoginService,
+    UserInfoService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

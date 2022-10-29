@@ -1,0 +1,15 @@
+<h1>User Information</h1>
+<img
+  [src]="myInfo.profilePic || '/assets/placeholder.png'"
+  alt="Profile pic for {{ myInfo.username }}"
+  class="profile-pic"
+/>
+<button mat-icon-button>
+  <mat-icon>add_a_photo</mat-icon>
+</button>
+<p>profile pic form</p>
+<form>
+  <input type="file" class="file-input" />
+</form>
+<h2>Username: {{ myInfo.username }}</h2>
+<h2>Joined: {{ myInfo.dateJoined }}</h2>

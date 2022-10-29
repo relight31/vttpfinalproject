@@ -13,3 +13,9 @@ export interface Listing {
   description: string;
   username: string;
 }
+export interface UserInfo {
+  userId: string;
+  username: string;
+  profilePic: string;
+  dateJoined: string;
+}

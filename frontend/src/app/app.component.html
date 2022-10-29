@@ -6,7 +6,9 @@
   </button>
   <mat-menu #menu="matMenu">
     <div *ngIf="isLoggedIn()" (click)="$event.stopPropagation()">
-      <button mat-button><mat-icon>person</mat-icon> My Profile</button>
+      <button mat-button [routerLink]="['/myprofile']">
+        <mat-icon>person</mat-icon> My Profile
+      </button>
       <button mat-button [routerLink]="['/favourites']">
         <mat-icon>favorite</mat-icon> My Favourites
       </button>
