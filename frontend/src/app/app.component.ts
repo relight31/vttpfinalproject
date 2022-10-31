@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { LoginService } from './services/login.service';
 
 @Component({
@@ -10,7 +12,15 @@ import { LoginService } from './services/login.service';
 export class AppComponent implements OnInit {
   title = 'frontend';
   form!: FormGroup;
-  constructor(private fb: FormBuilder, private loginSvc: LoginService) {}
+  hide: boolean = true;
+  currentUser: string = '';
+
+  constructor(
+    private fb: FormBuilder,
+    private loginSvc: LoginService,
+    private _snackbar: MatSnackBar,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.createLoginForm();
@@ -31,10 +41,54 @@ export class AppComponent implements OnInit {
     const username = this.form.value.username;
     const password = this.form.value.password;
     // Submit username and password to loginservice
-    this.loginSvc.login(username, password);
+    this.loginSvc
+      .login(username, password)
+      .then(() => {
+        this._snackbar.open('Logged in successfully', 'Close', {
+          duration: 1000,
+        });
+        this.currentUser = username;
+      })
+      .catch((error) => {
+        this._snackbar.open('Invalid login credentials', 'Close', {
+          duration: 2000,
+        });
+      });
   }
 
   logout() {
     sessionStorage.removeItem('token');
+    this.currentUser = '';
+    this._snackbar.open('Logged out successfully!', 'Close', {
+      duration: 2000,
+    });
+    this.createLoginForm();
+  }
+
+  signUp() {
+    const username = this.form.value.username;
+    const password = this.form.value.password;
+    // submit username and password to loginservice
+    this.loginSvc
+      .signUp(username, password)
+      .then(() => {
+        this.router.navigate(['/myprofile']);
+        this._snackbar.open(
+          'Welcome to CurrencyFlip, ' + username + '!',
+          'Close',
+          { duration: 2000 }
+        );
+        this.currentUser = username;
+      })
+      .catch((error) => {
+        console.log(error);
+        this._snackbar.open(
+          'Unable to create new account, try again later',
+          'Close',
+          {
+            duration: 2000,
+          }
+        );
+      });
   }
 }

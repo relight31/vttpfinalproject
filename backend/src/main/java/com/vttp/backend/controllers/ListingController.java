@@ -86,10 +86,11 @@ public class ListingController {
         String username = principal.getName();
         try {
             listingSvc.addFavourite(listingId, username);
+            return getFavourites(principal);
         } catch (Exception e) {
-            // TODO: handle exception
+            logger.info("yohohoho cannot add favourite");
+            return ResponseEntity.badRequest().build();
         }
-        return getFavourites(principal);
     }
 
     @DeleteMapping(path = "/deleteFavourite/{listingId}")

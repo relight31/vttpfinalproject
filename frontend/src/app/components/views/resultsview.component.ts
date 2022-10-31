@@ -97,8 +97,17 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
   }
 
   addFavourite(listingId: number) {
-    this.listingSvc.addToFavourites(listingId);
-    console.log('adding listingId: ' + listingId + ' to favourites');
-    this._snackbar.open('Added to Favourites!', 'Close', { duration: 1000 });
+    this.listingSvc
+      .addToFavourites(listingId)
+      .then(() => {
+        this._snackbar.open('Added to Favourites!', 'Close', {
+          duration: 1000,
+        });
+      })
+      .catch((error) => {
+        this._snackbar.open('Already in favourites', 'Close', {
+          duration: 1000,
+        });
+      });
   }
 }

@@ -1,5 +1,7 @@
 package com.vttp.backend.repositories;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -20,6 +22,7 @@ public class UserInfoRepository {
 
     private final String SQL_USERINFO_FROM_USERNAME = "select * from userinfo where username = ?";
     private final String SQL_UPDATE_PROFILE_PIC = "update userinfo set profile_pic = ? where userinfo_id = ?";
+    private final String SQL_INSERT_NEW_BLANK_USERINFO = "insert into userinfo (user_id, username, date_joined) values (?,?,?)";
 
     public int userIdFromUsername(String username) throws UsernameNotFoundException {
         SqlRowSet rowSet = template.queryForRowSet(
@@ -50,5 +53,14 @@ public class UserInfoRepository {
         return template.update(SQL_UPDATE_PROFILE_PIC,
                 path,
                 userInfoId) == 1;
+    }
+
+    public boolean addNewUserInfo(String username, int userId) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String today = LocalDate.now().format(formatter);
+        return template.update(SQL_INSERT_NEW_BLANK_USERINFO,
+                userId,
+                username,
+                today) == 1;
     }
 }

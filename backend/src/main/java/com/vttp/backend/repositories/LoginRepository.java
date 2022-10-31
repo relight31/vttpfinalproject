@@ -24,6 +24,7 @@ public class LoginRepository {
 
     private final String SQL_LOAD_USER_BY_USERNAME = "select * from users where username = ?";
     private final String SQL_ADD_NEW_USER = "insert into users (username, password, roles) values (?,?,?)";
+    private final String SQL_GET_USERID_OF_NEWUSER = "select user_id, username from users where username =?";
 
     public Optional<UserDetails> loadUserByUsername(String username) {
         SqlRowSet result = template.queryForRowSet(
@@ -37,13 +38,23 @@ public class LoginRepository {
         }
     }
 
-    public boolean addNewUser(
+    public int addNewUser(
             String username,
             String password,
             String role) {
-        return template.update(SQL_ADD_NEW_USER,
+        if (template.update(SQL_ADD_NEW_USER,
                 username,
                 passwordEncoder.encode(password),
-                role) == 1;
+                role) == 1) {
+            logger.info("Added new user " + username + " to user table");
+            SqlRowSet rowSet = template.queryForRowSet(SQL_GET_USERID_OF_NEWUSER, username);
+            rowSet.next();
+            int newUserId = rowSet.getInt("user_id");
+            logger.info("User " + username + "'s user id: " + newUserId);
+            return newUserId;
+        } else {
+            logger.info("Unable to add new user to user table");
+            throw new IllegalArgumentException("Unable to add new user to user table");
+        }
     }
 }

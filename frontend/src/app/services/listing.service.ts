@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { firstValueFrom, Subject, tap } from 'rxjs';
+import { catchError, firstValueFrom, Subject, tap, throwError } from 'rxjs';
 import { Listing } from '../models';
 
 @Injectable()
@@ -59,7 +59,7 @@ export class ListingService {
       'Bearer ' + sessionStorage.getItem('token')
     );
     // username + account get from backend
-    firstValueFrom(
+    return firstValueFrom(
       this.http
         .post<Listing[]>('/api/addFavourite/' + listingId, '', {
           headers: headers,
@@ -70,6 +70,10 @@ export class ListingService {
             console.log('>>>>> favourites: ' + result);
             // push to event
             this.onGetFavourites.next(result);
+          }),
+          catchError((error) => {
+            console.log('error adding to favourites');
+            return throwError(error);
           })
         )
     );

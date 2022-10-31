@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vttp.backend.models.LoginRequest;
 import com.vttp.backend.services.TokenService;
+import com.vttp.backend.services.UserService;
 
 @RestController
 public class AuthController {
@@ -23,6 +24,9 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authManager;
+
+    @Autowired
+    private UserService userSvc;
 
     @PostMapping(path = "/token")
     public ResponseEntity<String> getToken(
@@ -35,5 +39,19 @@ public class AuthController {
         String token = tokenSvc.generateToken(auth);
         logger.info("token granted: " + token);
         return ResponseEntity.ok(token);
+    }
+
+    @PostMapping(path = "/signup")
+    public ResponseEntity<String> signUp(@RequestBody LoginRequest signupRequest) {
+        // create new account in service
+        try {
+            userSvc.addNewUser(
+                    signupRequest.username(),
+                    signupRequest.password());
+            return getToken(signupRequest);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body("Unable to create new user");
+        }
     }
 }

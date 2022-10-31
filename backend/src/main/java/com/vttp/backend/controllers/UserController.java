@@ -20,7 +20,6 @@ import com.vttp.backend.services.UserService;
 @RestController
 @RequestMapping(path = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
-    // add users
     // modify user info
 
     private Logger logger = Logger.getLogger(UserController.class.getName());
