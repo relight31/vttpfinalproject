@@ -1,5 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Listing, RateDataSeries } from 'src/app/models';
 import { ExchangeratesService } from 'src/app/services/exchangerates.service';
@@ -17,6 +19,7 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
   currFrom!: string;
   currTo!: string;
   currSub$!: Subscription;
+  currencies: string[] = [];
 
   listings: Listing[] = [];
   listingSub$!: Subscription;
@@ -44,10 +47,15 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
   referenceLines: any[] = [];
   showRefLines: boolean = true;
 
+  formCardVisible: boolean = false;
+  formCard!: FormGroup;
+
   constructor(
     private rateSvc: ExchangeratesService,
     private listingSvc: ListingService,
-    private _snackbar: MatSnackBar
+    private _snackbar: MatSnackBar,
+    private route: ActivatedRoute,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -63,6 +71,13 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
     this.listingSub$ = this.listingSvc.onGetListings.subscribe((data) => {
       this.listings = data;
     });
+    this.route.queryParams.subscribe((params) => {
+      console.log(params);
+      this.rateSvc.getDailyRate(params['currFrom'], params['currTo']);
+      this.listingSvc.getAllListings(params['currFrom'], params['currTo']);
+    });
+    this.currencies = this.listingSvc.currencies;
+    this.createFormCard();
   }
 
   ngOnDestroy(): void {
@@ -109,5 +124,33 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
           duration: 1000,
         });
       });
+  }
+
+  createFormCard() {
+    this.formCard = this.fb.group({
+      title: this.fb.control('', [Validators.required]),
+      currFrom: this.fb.control('', [Validators.required]),
+      currTo: this.fb.control('', [Validators.required]),
+      rate: this.fb.control(0, [Validators.min(0.0000000001)]),
+      description: this.fb.control('', [Validators.required]),
+    });
+  }
+
+  showFormCard() {
+    this.formCardVisible = !this.formCardVisible;
+  }
+
+  submitFormCard() {
+    const listing = this.formCard.value as Listing;
+    console.log(listing);
+    console.log(">>>>> sending listing request to backend")
+    // send form values to listing service
+    this.listingSvc.addListing(listing);
+    this.cancelFormCard();
+  }
+
+  cancelFormCard() {
+    this.createFormCard();
+    this.showFormCard();
   }
 }

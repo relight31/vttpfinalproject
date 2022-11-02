@@ -11,6 +11,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
 import com.vttp.backend.models.Listing;
+import com.vttp.backend.models.ListingRequest;
 
 @Repository
 public class ListingRepository {
@@ -21,6 +22,9 @@ public class ListingRepository {
 
     private final String SQL_GET_LISTING_BY_ID = "select * from listingsview where listing_id=?";
     private final String SQL_GET_LISTINGS_BY_CURR = "select * from listingsview where curr_from =? and curr_to = ?";
+    private final String SQL_GET_LISTINGS_BY_USERNAME = "select * from listingsview where username = ?";
+    private final String SQL_ADD_LISTING = "insert into listings (title, user_id, curr_from, curr_to, rate, description) values (?,?,?,?,?,?)";
+    private final String SQL_DELETE_LISTING = "delete from listings where listing_id =?";
 
     private final String SQL_GET_FAVOURITES_BY_USERNAME = "select * from favouritesview where username = ?";
     private final String SQL_ADD_FAVOURITE = "insert into favourites (user_id, listing_id) values (?,?)";
@@ -54,6 +58,31 @@ public class ListingRepository {
         }
         logger.info("returning list of " + listings.size() + " listings");
         return listings;
+    }
+
+    public List<Listing> getListingsByUsername(String username) {
+        List<Listing> listings = new LinkedList<>();
+        SqlRowSet rowSet = template.queryForRowSet(
+                SQL_GET_LISTINGS_BY_USERNAME,
+                username);
+        while (rowSet.next()) {
+            listings.add(Listing.fromRowset(rowSet));
+        }
+        return listings;
+    }
+
+    public boolean addListing(ListingRequest listing, int userId) {
+        return template.update(SQL_ADD_LISTING,
+                listing.title(),
+                userId,
+                listing.currFrom(),
+                listing.currTo(),
+                listing.rate(),
+                listing.description()) == 1;
+    }
+
+    public boolean deleteListing(int listingId) {
+        return template.update(SQL_DELETE_LISTING, listingId) == 1;
     }
 
     public boolean isInFavourites(int listingId, String username) {

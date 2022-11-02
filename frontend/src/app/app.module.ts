@@ -16,6 +16,7 @@ import { LoginService } from './services/login.service';
 import { FavouritesviewComponent } from './components/views/favouritesview.component';
 import { ProfileviewComponent } from './components/views/profileview.component';
 import { UserInfoService } from './services/userinfo.service';
+import { MylistingsviewComponent } from './components/views/mylistingsview.component';
 
 const routes: Routes = [
   { path: '', component: IndexviewComponent, title: 'CurrencyFlip - Index' },
@@ -32,7 +33,12 @@ const routes: Routes = [
   {
     path: 'myprofile',
     component: ProfileviewComponent,
-    title: 'CurrencyClip - My Profile',
+    title: 'CurrencyFlip - My Profile',
+  },
+  {
+    path: 'mylistings',
+    component: MylistingsviewComponent,
+    title: 'CurrencyFlip - My Listings',
   },
   { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
@@ -44,6 +50,7 @@ const routes: Routes = [
     ResultsviewComponent,
     FavouritesviewComponent,
     ProfileviewComponent,
+    MylistingsviewComponent,
   ],
   imports: [
     BrowserModule,

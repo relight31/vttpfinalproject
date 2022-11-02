@@ -5,6 +5,8 @@ import { Listing } from '../models';
 
 @Injectable()
 export class ListingService {
+  currencies: string[] = ['SGD', 'MYR'];
+
   onGetListings = new Subject<Listing[]>();
   onGetListingById = new Subject<Listing>();
   onGetFavourites = new Subject<Listing[]>();
@@ -116,6 +118,49 @@ export class ListingService {
             this.onGetFavourites.next(result);
           })
         )
+    );
+  }
+
+  // add listings
+  addListing(listing: Listing) {
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      'Bearer ' + sessionStorage.getItem('token')
+    );
+    return firstValueFrom(
+      this.http
+        .post<Listing[]>('/api/addlisting', listing, { headers: headers })
+        .pipe(
+          tap((result) => {
+            console.log('>>>>> in tap');
+            this.onGetListings.next(result);
+          })
+        )
+    );
+  }
+  // remove listing by listing id?
+  removeListing(listingId: number) {
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      'Bearer ' + sessionStorage.getItem('token')
+    );
+    return firstValueFrom(
+      this.http.delete<Listing[]>('/api/deletelisting/' + listingId, {
+        headers: headers,
+      })
+    );
+  }
+
+  // get own listings
+  // info does not need to be shared with other components, no event
+  getOwnListings() {
+    // username from backend
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      'Bearer ' + sessionStorage.getItem('token')
+    );
+    return firstValueFrom(
+      this.http.get<Listing[]>('/api/mylistings', { headers: headers })
     );
   }
 }

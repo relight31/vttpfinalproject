@@ -8,6 +8,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSelectModule } from '@angular/material/select';
 
 const matModules: any[] = [
   MatToolbarModule,
@@ -18,6 +19,7 @@ const matModules: any[] = [
   MatMenuModule,
   MatFormFieldModule,
   MatInputModule,
+  MatSelectModule,
   MatSnackBarModule,
 ];
 

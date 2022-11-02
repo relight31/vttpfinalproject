@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vttp.backend.models.Listing;
+import com.vttp.backend.models.ListingRequest;
 import com.vttp.backend.repositories.ListingRepository;
 import com.vttp.backend.repositories.UserInfoRepository;
 
@@ -31,6 +32,21 @@ public class ListingService {
     public List<Listing> getListingsByCurrencies(
             String currFrom, String currTo) {
         return listingRepo.getListingsByCurrencies(currFrom, currTo);
+    }
+
+    public List<Listing> getListingsByUsername(String username) {
+        return listingRepo.getListingsByUsername(username);
+    }
+
+    public boolean addListing(ListingRequest listing, String username) {
+        // get userid
+        int userId = userInfoRepo.userIdFromUsername(username);
+        // add listing
+        return listingRepo.addListing(listing, userId);
+    }
+
+    public boolean deleteListing(int listingId){
+        return listingRepo.deleteListing(listingId);
     }
 
     public List<Listing> getFavourites(String username) {

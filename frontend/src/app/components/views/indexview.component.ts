@@ -11,10 +11,7 @@ import { ListingService } from 'src/app/services/listing.service';
 })
 export class IndexviewComponent implements OnInit {
   form!: FormGroup;
-  currencies: string[]=[
-    'SGD',
-    'MYR'
-  ]
+  currencies: string[] = ['SGD', 'MYR'];
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -35,14 +32,14 @@ export class IndexviewComponent implements OnInit {
     );
     const currFrom = this.form.value.currFrom;
     const currTo = this.form.value.currTo;
-
-    // submit form to backend
-    // get exchange rates
-    this.rateSvc.getDailyRate(currFrom, currTo);
-    // get listings for this exchange
-    this.listingSvc.getAllListings(currFrom, currTo);
     // navigate to result page
-    this.router.navigate(['/results']);
+    // form submission handled by results page
+    this.router.navigate(['/results'], {
+      queryParams: {
+        currFrom: currFrom,
+        currTo: currTo,
+      },
+    });
   }
 
   createForm() {

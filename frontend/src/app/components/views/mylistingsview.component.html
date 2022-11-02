@@ -1,0 +1,27 @@
+<h1>My Listings</h1>
+
+<div>
+  <p *ngIf="listings.length == 0">
+    No listings posted. Post one now from search page!
+  </p>
+  <mat-card
+    *ngFor="let l of listings; let i = index"
+    [ngClass]="cardClass()"
+    (mouseenter)="onMouseOver()"
+    (mouseleave)="onMouseOut()"
+  >
+    <mat-card-header>
+      <mat-card-title>{{ l.title }}</mat-card-title>
+      <mat-card-subtitle>{{ l.currFrom }} to {{ l.currTo }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <h2>Rate: {{ l.rate }}</h2>
+      <p>{{ l.description }}</p>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button (click)="removeListing(l.listingId)">
+        <mat-icon>delete_forever</mat-icon> Delete
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vttp.backend.models.Listing;
+import com.vttp.backend.models.ListingRequest;
 import com.vttp.backend.services.ListingService;
 
 import jakarta.json.JsonArray;
@@ -49,6 +50,19 @@ public class ListingController {
         }
     }
 
+    @GetMapping(path = "/mylistings")
+    public ResponseEntity<String> getMyListings(Principal principal) {
+        String username = principal.getName();
+        List<Listing> listings = listingSvc.getListingsByUsername(username);
+        JsonArray results = listingsToArray(listings);
+        if (results.size() > 0) {
+            return ResponseEntity.ok(results.toString());
+        } else {
+            logger.info("No results retrieved from service");
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @GetMapping(path = "/listing/{listingId}")
     public ResponseEntity<String> getListing(@PathVariable int listingId) {
         Optional<Listing> opt = listingSvc.getListingById(listingId);
@@ -62,9 +76,37 @@ public class ListingController {
     }
 
     @PostMapping(path = "/addlisting")
-    public ResponseEntity<String> addListing(@RequestBody String payload) {
-        // TODO add listing method
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<String> addListing(
+            @RequestBody ListingRequest payload,
+            Principal principal) {
+        String username = principal.getName();
+        HttpStatus status;
+        if (listingSvc.addListing(payload, username)) {
+            status = HttpStatus.CREATED;
+        } else {
+            status = HttpStatus.BAD_REQUEST;
+        }
+        List<Listing> listings = listingSvc.getListingsByCurrencies(
+                payload.currFrom(),
+                payload.currTo());
+        JsonArray results = listingsToArray(listings);
+        return ResponseEntity.status(status).body(results.toString());
+    }
+
+    @DeleteMapping(path = "/deletelisting/{listingId}")
+    public ResponseEntity<String> deleteListing(
+            @PathVariable int listingId,
+            Principal principal) {
+        String username = principal.getName();
+        HttpStatus status;
+        if (listingSvc.deleteListing(listingId)) {
+            status = HttpStatus.OK;
+        } else {
+            status = HttpStatus.BAD_REQUEST;
+        }
+        List<Listing> listings = listingSvc.getListingsByUsername(username);
+        JsonArray results = listingsToArray(listings);
+        return ResponseEntity.status(status).body(results.toString());
     }
 
     @GetMapping(path = "/getFavourites")
