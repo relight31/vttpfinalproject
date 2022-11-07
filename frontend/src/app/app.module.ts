@@ -17,6 +17,8 @@ import { FavouritesviewComponent } from './components/views/favouritesview.compo
 import { ProfileviewComponent } from './components/views/profileview.component';
 import { UserInfoService } from './services/userinfo.service';
 import { MylistingsviewComponent } from './components/views/mylistingsview.component';
+import { ChatService } from './services/chat.service';
+import { ChatviewComponent } from './components/views/chatview.component';
 
 const routes: Routes = [
   { path: '', component: IndexviewComponent, title: 'CurrencyFlip - Index' },
@@ -40,6 +42,11 @@ const routes: Routes = [
     component: MylistingsviewComponent,
     title: 'CurrencyFlip - My Listings',
   },
+  {
+    path: 'chat/:chatId',
+    component: ChatviewComponent,
+    title: 'CurrencyFlip - Chat',
+  },
   { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
 
@@ -51,6 +58,7 @@ const routes: Routes = [
     FavouritesviewComponent,
     ProfileviewComponent,
     MylistingsviewComponent,
+    ChatviewComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,6 +75,7 @@ const routes: Routes = [
     ListingService,
     LoginService,
     UserInfoService,
+    ChatService,
   ],
   bootstrap: [AppComponent],
 })

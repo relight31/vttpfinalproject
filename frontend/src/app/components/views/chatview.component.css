@@ -1,0 +1,14 @@
+.message-container {
+  border: 2px solid black;
+  padding: 5px;
+  overflow-y: scroll;
+  height: 50vh;
+}
+
+.message-left {
+  text-align: left;
+}
+
+.message-right {
+  text-align: right;
+}

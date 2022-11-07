@@ -1,9 +1,10 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Listing, RateDataSeries } from 'src/app/models';
+import { ChatService } from 'src/app/services/chat.service';
 import { ExchangeratesService } from 'src/app/services/exchangerates.service';
 import { ListingService } from 'src/app/services/listing.service';
 
@@ -25,7 +26,7 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
   listingSub$!: Subscription;
 
   public get width() {
-    return window.innerWidth;
+    return window.innerWidth * 0.96;
   }
 
   // chart options
@@ -53,8 +54,10 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
   constructor(
     private rateSvc: ExchangeratesService,
     private listingSvc: ListingService,
+    private chatSvc: ChatService,
     private _snackbar: MatSnackBar,
     private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder
   ) {}
 
@@ -143,7 +146,7 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
   submitFormCard() {
     const listing = this.formCard.value as Listing;
     console.log(listing);
-    console.log(">>>>> sending listing request to backend")
+    console.log('>>>>> sending listing request to backend');
     // send form values to listing service
     this.listingSvc.addListing(listing);
     this.cancelFormCard();
@@ -152,5 +155,22 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
   cancelFormCard() {
     this.createFormCard();
     this.showFormCard();
+  }
+
+  goToChat(listing: Listing) {
+    const recipient = listing.username;
+    const listingId = listing.listingId;
+    this.chatSvc
+      .getChatId(recipient, listingId)
+      .then((result) => {
+        console.log('>>>>> chat ID: ' + result.chatId);
+        this.router.navigate(['/chat', result.chatId], {
+          queryParams: { recipient: recipient },
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        this._snackbar.open('Unable to open chat', 'Close', { duration: 2000 });
+      });
   }
 }

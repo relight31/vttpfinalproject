@@ -60,6 +60,9 @@ public class SecurityConfig {
                 .authorizeRequests(auth -> auth
                         .mvcMatchers(HttpMethod.POST, "/token").permitAll()
                         .mvcMatchers(HttpMethod.POST, "/signup").permitAll()
+                        .mvcMatchers("/api/chat/**",
+                                "/api/topic/messages/**")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(session -> session

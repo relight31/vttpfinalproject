@@ -117,7 +117,9 @@
       <button mat-button (click)="addFavourite(l.listingId)">
         <mat-icon>favorite</mat-icon> Save
       </button>
-      <button mat-button><mat-icon>chat</mat-icon> Chat</button>
+      <button mat-button (click)="goToChat(l)">
+        <mat-icon>chat</mat-icon> Chat
+      </button>
     </mat-card-actions>
   </mat-card>
 </div>

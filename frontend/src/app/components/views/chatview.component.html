@@ -1,0 +1,25 @@
+<h1>Chat with {{ recipient }}</h1>
+<div class="message-container" #messageContainer>
+  <div
+    *ngFor="let m of messages; let last = last"
+    [ngClass]="messageClass(m.sender)"
+  >
+    <h2>{{ m.sender }} says:</h2>
+    <p>{{ m.content }}</p>
+    <p>at {{ m.timestamp }}</p>
+    {{ last ? scrollToBottom() : "" }}
+  </div>
+</div>
+<div *ngIf="messages.length == 0">
+  <h2>No messages to display</h2>
+</div>
+<form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+  <mat-form-field appearance="fill">
+    <mat-label>Your message here</mat-label>
+    <textarea matInput cols="30" rows="10" formControlName="message" placeholder="Eg. Hi, how much can you change?"></textarea>
+  </mat-form-field>
+  <br />
+  <button mat-button type="submit" [disabled]="messageForm.invalid">
+    Send <mat-icon>send</mat-icon>
+  </button>
+</form>

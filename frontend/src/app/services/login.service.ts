@@ -17,6 +17,7 @@ export class LoginService {
         tap((result) => {
           if (result) {
             sessionStorage.setItem('token', result);
+            sessionStorage.setItem('username', username);
           }
         }),
         catchError((error) => {
@@ -39,6 +40,7 @@ export class LoginService {
         tap((result) => {
           if (result) {
             sessionStorage.setItem('token', result);
+            sessionStorage.setItem('username', username);
           }
         }),
         catchError((error) => {

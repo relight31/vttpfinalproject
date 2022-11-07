@@ -48,4 +48,8 @@ export class IndexviewComponent implements OnInit {
       currTo: this.fb.control('MYR', [Validators.required]),
     });
   }
+
+  invalid() {
+    return this.form.value.currFrom == this.form.value.currTo;
+  }
 }

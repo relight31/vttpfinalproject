@@ -24,6 +24,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.createLoginForm();
+    this.currentUser = sessionStorage.getItem('username') || '';
   }
 
   createLoginForm() {
@@ -47,7 +48,7 @@ export class AppComponent implements OnInit {
         this._snackbar.open('Logged in successfully', 'Close', {
           duration: 1000,
         });
-        this.currentUser = username;
+        this.currentUser = sessionStorage.getItem('username') || '';
       })
       .catch((error) => {
         this._snackbar.open('Invalid login credentials', 'Close', {
@@ -58,11 +59,13 @@ export class AppComponent implements OnInit {
 
   logout() {
     sessionStorage.removeItem('token');
+    sessionStorage.removeItem('username');
     this.currentUser = '';
     this._snackbar.open('Logged out successfully!', 'Close', {
       duration: 2000,
     });
     this.createLoginForm();
+    this.router.navigate(['/']);
   }
 
   signUp() {

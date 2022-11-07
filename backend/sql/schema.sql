@@ -57,23 +57,27 @@ create table favourites(
         references listings(listing_id)
 );
 
-create table chats(
-    chat_id int auto_increment not null,
-    user1 int,
-    user2 int,
-    primary key(chat_id)
-);
-
 create table messages(
     message_id int auto_increment not null,
-    chat_id int,
-    body varchar(256),
-    msg_time timestamp,
-    primary key(message_id),
+    chat_id varchar(45),
+    sender varchar(45),
+    content varchar(256),
+    msg_timestamp timestamp,
+    primary key(message_id)
+);
 
-    constraint fk_chat_id_messages
-        foreign key(chat_id)
-        references chats(chat_id)
+create table chats(
+    chat_number int auto_increment not null,
+    chat_id varchar(45),
+    listing_id int,
+    username_1 varchar(45),
+    username_2 varchar(45),
+    primary key(chat_number),
+    index username_ind (username_1, username_2),
+
+    constraint fk_listing_id_chats
+        foreign key(listing_id)
+        references listings(listing_id)
 );
 
 create view listingsview as
@@ -90,7 +94,7 @@ create view listingsview as
     and l.user_id = u.user_id;
 
 create view favouritesview as
-    select l.listing_id,
+    select f.listing_id,
     l.title,
     ui.user_id,
     ui.username,
@@ -99,6 +103,21 @@ create view favouritesview as
     l.rate,
     l.description
     from favourites f, listings l, userinfo ui, users u
-    where f.user_id = u.user_id
+    where f.listing_id = l.listing_id
+    and f.user_id = u.user_id
+    and u.user_id = ui.user_id;
+
+create view chatsview as
+    select c.chat_id,
+    l.listing_id,
+    l.title,
+    ui.user_id,
+    ui.username,
+    l.curr_from,
+    l.curr_to,
+    l.rate,
+    l.description
+    from chats c, listings l, userinfo ui, users u
+    where c.listing_id = l.listing_id
     and u.user_id = ui.user_id
     and l.user_id = u.user_id;

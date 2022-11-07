@@ -2,6 +2,7 @@ package com.vttp.backend.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import jakarta.json.JsonArrayBuilder;
 
 @Service
 public class ListingService {
+    private Logger logger = Logger.getLogger(ListingService.class.getName());
 
     @Autowired
     private ListingRepository listingRepo;
@@ -45,7 +47,7 @@ public class ListingService {
         return listingRepo.addListing(listing, userId);
     }
 
-    public boolean deleteListing(int listingId){
+    public boolean deleteListing(int listingId) {
         return listingRepo.deleteListing(listingId);
     }
 
@@ -57,6 +59,7 @@ public class ListingService {
     public void addFavourite(int listingId, String username) {
         // get userId with exception
         int userId = userInfoRepo.userIdFromUsername(username);
+        logger.info("userId for " + username + " retrieved: " + userId);
         // check not alr in favourites
         if (listingRepo.isInFavourites(listingId, username)) {
             throw new IllegalArgumentException("Already in favourites");
