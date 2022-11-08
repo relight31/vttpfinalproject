@@ -44,7 +44,7 @@ public class ChatController {
         chatSvc.saveToHistory(msg);
         // put message in websocket
         template.convertAndSend("/api/topic/messages/" + chatId, msg);
-        // TODO fix security config
+        // TODO implement mychats view
     }
 
     @GetMapping(path = "/api/getmessages")

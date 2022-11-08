@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
   }
 
   isLoggedIn(): boolean {
-    return sessionStorage.getItem('token') != null;
+    return sessionStorage.getItem('username') != null;
   }
 
   submitLogin() {
@@ -58,14 +58,24 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('username');
-    this.currentUser = '';
-    this._snackbar.open('Logged out successfully!', 'Close', {
-      duration: 2000,
-    });
-    this.createLoginForm();
-    this.router.navigate(['/']);
+    this.loginSvc
+      .logout()
+      .then((resp) => {
+        // sessionStorage.removeItem('token');
+        sessionStorage.removeItem('username');
+        this.currentUser = '';
+        this._snackbar.open('Logged out successfully!', 'Close', {
+          duration: 2000,
+        });
+        this.createLoginForm();
+        this.router.navigate(['/']);
+      })
+      .catch((error) => {
+        console.log(error);
+        this._snackbar.open('Unable to logout', 'Close', {
+          duration: 2000,
+        });
+      });
   }
 
   signUp() {

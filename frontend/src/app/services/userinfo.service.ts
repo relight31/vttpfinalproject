@@ -10,12 +10,12 @@ export class UserInfoService {
   constructor(private http: HttpClient) {}
 
   getOwnInfo() {
-    const headers = new HttpHeaders().set(
-      'Authorization',
-      'Bearer ' + sessionStorage.getItem('token')
-    );
+    // const headers = new HttpHeaders().set(
+    //   'Authorization',
+    //   'Bearer ' + sessionStorage.getItem('token')
+    // );
     firstValueFrom(
-      this.http.get<UserInfo>('/api/myprofile', { headers: headers }).pipe(
+      this.http.get<UserInfo>('/api/myprofile', {}).pipe(
         tap((result) => {
           console.log('>>>>> in tap');
           this.onGetOwnInfo.next(result);
@@ -25,22 +25,18 @@ export class UserInfoService {
   }
 
   submitPhoto(formData: FormData) {
-    const headers = new HttpHeaders().set(
-      'Authorization',
-      'Bearer ' + sessionStorage.getItem('token')
-    );
+    // const headers = new HttpHeaders().set(
+    //   'Authorization',
+    //   'Bearer ' + sessionStorage.getItem('token')
+    // );
     firstValueFrom(
-      this.http
-        .post<UserInfo>('/api/myprofile/uploadphoto', formData, {
-          headers: headers,
+      this.http.post<UserInfo>('/api/myprofile/uploadphoto', formData, {}).pipe(
+        tap((result) => {
+          console.log('>>>>> in tap');
+          console.log(result);
+          this.onGetOwnInfo.next(result);
         })
-        .pipe(
-          tap((result) => {
-            console.log('>>>>> in tap');
-            console.log(result);
-            this.onGetOwnInfo.next(result);
-          })
-        )
+      )
     );
   }
 }

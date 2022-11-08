@@ -15,10 +15,10 @@ export class ExchangeratesService {
     const params = new HttpParams()
       .set('currFrom', currFrom)
       .set('currTo', currTo);
-    const headers = new HttpHeaders().set(
-      'Authorization',
-      'Bearer ' + sessionStorage.getItem('token')
-    );
+    // const headers = new HttpHeaders().set(
+    //   'Authorization',
+    //   'Bearer ' + sessionStorage.getItem('token')
+    // );
 
     // put currencies into event
     const temp = [currFrom, currTo];
@@ -28,7 +28,7 @@ export class ExchangeratesService {
     // put results into event
     firstValueFrom(
       this.http
-        .get<any>('/api/rates', { params: params, headers: headers })
+        .get<any>('/api/rates', { params: params })
         .pipe(
           tap((result) => {
             console.log('>>>>> in tap');

@@ -15,10 +15,10 @@ export class LoginService {
     return firstValueFrom(
       this.http.post('/token', details, { responseType: 'text' }).pipe(
         tap((result) => {
-          if (result) {
-            sessionStorage.setItem('token', result);
-            sessionStorage.setItem('username', username);
-          }
+          // if (result) {
+          // sessionStorage.setItem('token', result);
+          sessionStorage.setItem('username', username);
+          // }
         }),
         catchError((error) => {
           console.log('error caught in login service');
@@ -27,6 +27,10 @@ export class LoginService {
         })
       )
     );
+  }
+
+  logout() {
+    return firstValueFrom(this.http.get('/logoutt'));
   }
 
   signUp(username: string, password: string) {
@@ -39,7 +43,7 @@ export class LoginService {
       this.http.post('/signup', details, { responseType: 'text' }).pipe(
         tap((result) => {
           if (result) {
-            sessionStorage.setItem('token', result);
+            // sessionStorage.setItem('token', result);
             sessionStorage.setItem('username', username);
           }
         }),
