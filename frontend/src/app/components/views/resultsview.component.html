@@ -20,7 +20,11 @@
 
 <div>
   <h1>Listings</h1>
-  <button mat-button (click)="formCardVisible = !formCardVisible">
+  <button
+    mat-button
+    (click)="formCardVisible = !formCardVisible"
+    [disabled]="username == ''"
+  >
     <mat-icon>format_list_bulleted_add</mat-icon> Add a Listing!
   </button>
   <mat-card *ngIf="formCardVisible">
@@ -101,9 +105,9 @@
   <p *ngIf="listings.length == 0">Listings not available</p>
   <mat-card
     *ngFor="let l of listings; let i = index"
-    [ngClass]="cardClass()"
-    (mouseenter)="onMouseOver(l)"
-    (mouseleave)="onMouseOut()"
+    [ngClass]="cardClass(i)"
+    (mouseenter)="onMouseOver(l, i)"
+    (mouseleave)="onMouseOut(i)"
     style="margin-bottom: 5px"
   >
     <mat-card-header>
@@ -115,10 +119,18 @@
       <p>{{ l.description }}</p>
     </mat-card-content>
     <mat-card-actions align="end">
-      <button mat-button (click)="addFavourite(l.listingId)">
+      <button
+        mat-button
+        (click)="addFavourite(l.listingId)"
+        [disabled]="l.username == username"
+      >
         <mat-icon>favorite</mat-icon> Save
       </button>
-      <button mat-button (click)="goToChat(l)">
+      <button
+        mat-button
+        (click)="goToChat(l)"
+        [disabled]="l.username == username"
+      >
         <mat-icon>chat</mat-icon> Chat
       </button>
     </mat-card-actions>

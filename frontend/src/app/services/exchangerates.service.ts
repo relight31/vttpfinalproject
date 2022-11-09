@@ -15,15 +15,10 @@ export class ExchangeratesService {
     const params = new HttpParams()
       .set('currFrom', currFrom)
       .set('currTo', currTo);
-    // const headers = new HttpHeaders().set(
-    //   'Authorization',
-    //   'Bearer ' + sessionStorage.getItem('token')
-    // );
 
     // put currencies into event
     const temp = [currFrom, currTo];
     console.log(temp);
-    // this.onGetCurrencies.next(temp);
 
     // put results into event
     firstValueFrom(

@@ -10,10 +10,6 @@ export class UserInfoService {
   constructor(private http: HttpClient) {}
 
   getOwnInfo() {
-    // const headers = new HttpHeaders().set(
-    //   'Authorization',
-    //   'Bearer ' + sessionStorage.getItem('token')
-    // );
     firstValueFrom(
       this.http.get<UserInfo>('/api/myprofile', {}).pipe(
         tap((result) => {
@@ -25,10 +21,6 @@ export class UserInfoService {
   }
 
   submitPhoto(formData: FormData) {
-    // const headers = new HttpHeaders().set(
-    //   'Authorization',
-    //   'Bearer ' + sessionStorage.getItem('token')
-    // );
     firstValueFrom(
       this.http.post<UserInfo>('/api/myprofile/uploadphoto', formData, {}).pipe(
         tap((result) => {

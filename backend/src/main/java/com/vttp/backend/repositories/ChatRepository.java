@@ -21,6 +21,7 @@ public class ChatRepository {
     private final String SQL_SAVE_MESSAGE = "insert into messages (chat_id, sender, content, msg_timestamp) values (?,?,?,?)";
     private final String SQL_DOES_CHAT_EXIST = "select * from chatsview where chat_id = ?";
     private final String SQL_INSERT_NEW_CHAT = "insert into chats (chat_id, listing_id, username_1, username_2) values (?,?,?,?)";
+    private final String SQL_GET_CHATS_BY_USERNAME = "select * from chatsview where user_1 = ? or user_2 = ?";
 
     public void saveToHistory(MessageEntity message) {
         template.update(SQL_SAVE_MESSAGE,
@@ -37,6 +38,12 @@ public class ChatRepository {
             messages.add(rowSetToMessageEntity(rowSet));
         }
         return messages;
+    }
+
+    public SqlRowSet getChats(String username) {
+        return template.queryForRowSet(SQL_GET_CHATS_BY_USERNAME,
+                username,
+                username);
     }
 
     public boolean chatExists(String chatId) {

@@ -22,7 +22,9 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
   currSub$!: Subscription;
   currencies: string[] = [];
 
+  username!: string;
   listings: Listing[] = [];
+  mouseover: boolean[] = [];
   listingSub$!: Subscription;
 
   public get width() {
@@ -62,6 +64,7 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.username = sessionStorage.getItem('username') || '';
     console.log('>>>>> subscribing to rates from rate Service');
     this.rateSub$ = this.rateSvc.onGetRates.subscribe((data) => {
       this.rates = data;
@@ -73,6 +76,9 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
     });
     this.listingSub$ = this.listingSvc.onGetListings.subscribe((data) => {
       this.listings = data;
+      this.listings.forEach((element) => {
+        this.mouseover.push(false);
+      });
     });
     this.route.queryParams.subscribe((params) => {
       console.log(params);
@@ -89,7 +95,7 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
     this.listingSub$.unsubscribe();
   }
 
-  onMouseOver(listing: Listing) {
+  onMouseOver(listing: Listing, i: number) {
     console.log('mouseover!');
     this.referenceLines = [
       {
@@ -97,17 +103,19 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
         value: listing.rate,
       },
     ];
+    this.mouseover[i] = true;
     console.log(this.referenceLines);
   }
 
-  onMouseOut() {
+  onMouseOut(i: number) {
     console.log('mouseout!');
     this.referenceLines = [];
+    this.mouseover[i] = false;
     console.log(this.referenceLines);
   }
 
-  cardClass() {
-    if (this.referenceLines.length) {
+  cardClass(i: number) {
+    if (this.mouseover[i]) {
       return 'card-mouseover mat-card';
     } else {
       return 'mat-card';

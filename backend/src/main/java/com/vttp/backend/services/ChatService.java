@@ -3,8 +3,10 @@ package com.vttp.backend.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
+import com.vttp.backend.models.Listing;
 import com.vttp.backend.models.MessageEntity;
 import com.vttp.backend.repositories.ChatRepository;
 import com.vttp.backend.repositories.UserInfoRepository;
@@ -27,6 +29,26 @@ public class ChatService {
 
     public List<MessageEntity> getMessages(String chatId) {
         return chatRepo.getMessages(chatId);
+    }
+
+    public JsonArray getChats(String username) {
+        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+        SqlRowSet rowSet = chatRepo.getChats(username);
+        while (rowSet.next()) {
+            Listing listing = Listing.fromRowset(rowSet);
+            String chatId = rowSet.getString("chat_id");
+            String recipient = rowSet.getString("user_1");
+            if (recipient.equals(username)) {
+                recipient = rowSet.getString("user_2");
+            }
+            arrayBuilder.add(
+                    Json.createObjectBuilder()
+                            .add("chatId", chatId)
+                            .add("recipient", recipient)
+                            .add("listing", listing.toJsonObject())
+                            .build());
+        }
+        return arrayBuilder.build();
     }
 
     public JsonArray messagesToJsonArray(List<MessageEntity> messages) {

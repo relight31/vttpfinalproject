@@ -21,6 +21,7 @@ import com.vttp.backend.models.MessageEntity;
 import com.vttp.backend.services.ChatService;
 
 import jakarta.json.Json;
+import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 
 @Controller
@@ -70,6 +71,19 @@ public class ChatController {
             logger.info(result.toString());
             return ResponseEntity.ok(result.toString());
         } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping(path = "/getchats", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getChats(Principal principal) {
+        String username = principal.getName();
+        // get listings with active chats
+        JsonArray results = chatSvc.getChats(username);
+        if (results.size() > 0) {
+            return ResponseEntity.ok(results.toString());
+        } else {
+            logger.info("No active chats found");
             return ResponseEntity.badRequest().build();
         }
     }

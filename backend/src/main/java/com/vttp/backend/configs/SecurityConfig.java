@@ -9,6 +9,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,19 +22,8 @@ import com.vttp.backend.services.MyUserDetailsService;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // @Value("${rsa.public-key}")
-    // private String publicKeyString;
-
-    // @Value("${rsa.private-key}")
-    // private String privateKeyString;
-
     @Autowired
     private JwtCookieRequestFilter jwtCookieRequestFilter;
-
-    // @Bean
-    // public PasswordEncoder passwordEncoder() {
-    // return new BCryptPasswordEncoder();
-    // }
 
     @Bean
     public AuthenticationManager authManager(
@@ -52,6 +42,7 @@ public class SecurityConfig {
                 .authorizeRequests(auth -> auth
                         .mvcMatchers(HttpMethod.POST, "/token").permitAll()
                         .mvcMatchers(HttpMethod.POST, "/signup").permitAll()
+                        .antMatchers("/*", "/assets/**").permitAll()
                         // .mvcMatchers("/api/chat/**",
                         // "/api/topic/messages/**")
                         // .permitAll()
@@ -63,23 +54,16 @@ public class SecurityConfig {
                 .build();
     }
 
-    // @Bean
-    // JwtDecoder jwtDecoder() throws Exception {
-    // return NimbusJwtDecoder.withPublicKey(
-    // UserRepoUtils.getPublicKey(publicKeyString))
-    // .build();
-    // }
-
-    // @Bean
-    // JwtEncoder jwtEncoder() throws Exception {
-    // JWK jwk = new RSAKey.Builder(
-    // UserRepoUtils.getPublicKey(
-    // publicKeyString))
-    // .privateKey(
-    // UserRepoUtils.getPrivateKey(privateKeyString))
-    // .build();
-    // JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(
-    // new JWKSet(jwk));
-    // return new NimbusJwtEncoder(jwkSource);
-    // }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+                .antMatchers(
+                        "/css/**",
+                        "/js/**",
+                        "/img/**",
+                        "/lib/**",
+                        "/favicon.ico",
+                        "/resources/**",
+                        "/static/**");
+    }
 }

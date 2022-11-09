@@ -49,6 +49,7 @@ export class AppComponent implements OnInit {
           duration: 1000,
         });
         this.currentUser = sessionStorage.getItem('username') || '';
+        this.router.navigate(['/']);
       })
       .catch((error) => {
         this._snackbar.open('Invalid login credentials', 'Close', {

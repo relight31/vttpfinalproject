@@ -19,6 +19,7 @@ import { UserInfoService } from './services/userinfo.service';
 import { MylistingsviewComponent } from './components/views/mylistingsview.component';
 import { ChatService } from './services/chat.service';
 import { ChatviewComponent } from './components/views/chatview.component';
+import { MychatsComponent } from './components/views/mychats.component';
 
 const routes: Routes = [
   { path: '', component: IndexviewComponent, title: 'CurrencyFlip - Index' },
@@ -43,6 +44,11 @@ const routes: Routes = [
     title: 'CurrencyFlip - My Listings',
   },
   {
+    path: 'mychats',
+    component: MychatsComponent,
+    title: 'CurrencyFlip - My Chats',
+  },
+  {
     path: 'chat/:chatId',
     component: ChatviewComponent,
     title: 'CurrencyFlip - Chat',
@@ -59,6 +65,7 @@ const routes: Routes = [
     ProfileviewComponent,
     MylistingsviewComponent,
     ChatviewComponent,
+    MychatsComponent,
   ],
   imports: [
     BrowserModule,

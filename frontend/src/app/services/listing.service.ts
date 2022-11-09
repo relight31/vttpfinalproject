@@ -18,10 +18,7 @@ export class ListingService {
     const params = new HttpParams()
       .set('currFrom', currFrom)
       .set('currTo', currTo);
-    // const headers = new HttpHeaders().set(
-    //   'Authorization',
-    //   'Bearer ' + sessionStorage.getItem('token')
-    // );
+
     // put results into event
     firstValueFrom(
       this.http.get<Listing[]>('/api/listings', { params: params }).pipe(
@@ -34,10 +31,6 @@ export class ListingService {
   }
 
   getListingById(listingId: number) {
-    // const headers = new HttpHeaders().set(
-    //   'Authorization',
-    //   'Bearer ' + sessionStorage.getItem('token')
-    // );
     firstValueFrom(
       this.http
         .get<Listing>(['/api/listing/', listingId.toString()].join(''), {})
@@ -52,10 +45,6 @@ export class ListingService {
   }
 
   addToFavourites(listingId: number) {
-    // const headers = new HttpHeaders().set(
-    //   'Authorization',
-    //   'Bearer ' + sessionStorage.getItem('token')
-    // );
     // username + account get from backend
     return firstValueFrom(
       this.http.post<Listing[]>('/api/addFavourite/' + listingId, '', {}).pipe(
@@ -74,10 +63,6 @@ export class ListingService {
   }
 
   getFavourites() {
-    // const headers = new HttpHeaders().set(
-    //   'Authorization',
-    //   'Bearer ' + sessionStorage.getItem('token')
-    // );
     // username + account get from backend
     firstValueFrom(
       this.http.get<Listing[]>('/api/getFavourites', {}).pipe(
@@ -92,10 +77,6 @@ export class ListingService {
   }
 
   removeFromFavourites(listingId: number) {
-    // const headers = new HttpHeaders().set(
-    //   'Authorization',
-    //   'Bearer ' + sessionStorage.getItem('token')
-    // );
     // username + account get from backend
     firstValueFrom(
       this.http.delete<Listing[]>('/api/deleteFavourite/' + listingId, {}).pipe(
@@ -111,10 +92,6 @@ export class ListingService {
 
   // add listings
   addListing(listing: Listing) {
-    // const headers = new HttpHeaders().set(
-    //   'Authorization',
-    //   'Bearer ' + sessionStorage.getItem('token')
-    // );
     return firstValueFrom(
       this.http.post<Listing[]>('/api/addlisting', listing, {}).pipe(
         tap((result) => {
@@ -126,10 +103,6 @@ export class ListingService {
   }
   // remove listing by listing id?
   removeListing(listingId: number) {
-    // const headers = new HttpHeaders().set(
-    //   'Authorization',
-    //   'Bearer ' + sessionStorage.getItem('token')
-    // );
     return firstValueFrom(
       this.http.delete<Listing[]>('/api/deletelisting/' + listingId, {})
     );
@@ -138,11 +111,6 @@ export class ListingService {
   // get own listings
   // info does not need to be shared with other components, no event
   getOwnListings() {
-    // username from backend
-    // const headers = new HttpHeaders().set(
-    //   'Authorization',
-    //   'Bearer ' + sessionStorage.getItem('token')
-    // );
     return firstValueFrom(this.http.get<Listing[]>('/api/mylistings', {}));
   }
 }
