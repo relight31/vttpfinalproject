@@ -16,4 +16,4 @@ jobs:
         heroku_app_name: currencyflip
         heroku_email: ${{secrets.HEROKU_EMAIL}}
         appdir: "backend"
-        branch: master
+        branch: main
