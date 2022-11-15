@@ -143,7 +143,7 @@ public class ListingController {
         try {
             listingSvc.removeFavourite(listingId, username);
         } catch (Exception e) {
-            // TODO: handle exception
+            logger.warning(e.getMessage());
         }
         return getFavourites(principal);
     }

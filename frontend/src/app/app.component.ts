@@ -42,6 +42,9 @@ export class AppComponent implements OnInit {
     const username = this.form.value.username;
     const password = this.form.value.password;
     // Submit username and password to loginservice
+    this._snackbar.open('Logging in, please wait...', 'Close', {
+      duration: 1000,
+    });
     this.loginSvc
       .login(username, password)
       .then(() => {
@@ -59,6 +62,9 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
+    this._snackbar.open('Logging out, please wait...', 'Close', {
+      duration: 1000,
+    });
     this.loginSvc
       .logout()
       .then((resp) => {
@@ -83,6 +89,9 @@ export class AppComponent implements OnInit {
     const username = this.form.value.username;
     const password = this.form.value.password;
     // submit username and password to loginservice
+    this._snackbar.open('Signing up, please wait...', 'Close', {
+      duration: 1000,
+    });
     this.loginSvc
       .signUp(username, password)
       .then(() => {

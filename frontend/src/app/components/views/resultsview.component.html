@@ -27,7 +27,7 @@
   >
     <mat-icon>format_list_bulleted_add</mat-icon> Add a Listing!
   </button>
-  <mat-card *ngIf="formCardVisible">
+  <mat-card *ngIf="formCardVisible" style="margin-bottom: 5px">
     <form [formGroup]="formCard" (ngSubmit)="submitFormCard()">
       <mat-card-header>
         <mat-card-title>
@@ -95,7 +95,9 @@
         </p>
       </mat-card-content>
       <mat-card-actions align="end">
-        <button mat-button type="submit"><mat-icon>add</mat-icon> Add</button>
+        <button mat-button type="submit" [disabled]="formCard.invalid">
+          <mat-icon>add</mat-icon> Add
+        </button>
         <button mat-button type="button" (click)="cancelFormCard()">
           <mat-icon>close</mat-icon> Cancel
         </button>
@@ -103,36 +105,40 @@
     </form>
   </mat-card>
   <p *ngIf="listings.length == 0">Listings not available</p>
-  <mat-card
-    *ngFor="let l of listings; let i = index"
-    [ngClass]="cardClass(i)"
-    (mouseenter)="onMouseOver(l, i)"
-    (mouseleave)="onMouseOut(i)"
-    style="margin-bottom: 5px"
-  >
-    <mat-card-header>
-      <mat-card-title>{{ l.title }} by {{ l.username }}</mat-card-title>
-      <mat-card-subtitle>{{ l.currFrom }} to {{ l.currTo }}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <h2>Rate: {{ l.rate.toPrecision(4) }}</h2>
-      <p>{{ l.description }}</p>
-    </mat-card-content>
-    <mat-card-actions align="end">
-      <button
-        mat-button
-        (click)="addFavourite(l.listingId)"
-        [disabled]="l.username == username"
-      >
-        <mat-icon>favorite</mat-icon> Save
-      </button>
-      <button
-        mat-button
-        (click)="goToChat(l)"
-        [disabled]="l.username == username"
-      >
-        <mat-icon>chat</mat-icon> Chat
-      </button>
-    </mat-card-actions>
-  </mat-card>
+  <div class="listing-container">
+    <mat-card
+      *ngFor="let l of listings; let i = index"
+      [ngClass]="cardClass(i)"
+      (mouseenter)="onMouseOver(l, i)"
+      (mouseleave)="onMouseOut(i)"
+      style="margin-bottom: 5px"
+    >
+      <mat-card-header>
+        <mat-card-title>{{ l.title }} by {{ l.username }}</mat-card-title>
+        <mat-card-subtitle
+          >{{ l.currFrom }} to {{ l.currTo }}</mat-card-subtitle
+        >
+      </mat-card-header>
+      <mat-card-content>
+        <h2>Rate: {{ l.rate.toPrecision(4) }}</h2>
+        <p>{{ l.description }}</p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button
+          mat-button
+          (click)="addFavourite(l.listingId)"
+          [disabled]="l.username == username"
+        >
+          <mat-icon>favorite</mat-icon> Save
+        </button>
+        <button
+          mat-button
+          (click)="goToChat(l)"
+          [disabled]="l.username == username"
+        >
+          <mat-icon>chat</mat-icon> Chat
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
 </div>

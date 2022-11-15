@@ -31,8 +31,12 @@ export class ResultsviewComponent implements OnInit, OnDestroy {
     return window.innerWidth * 0.96;
   }
 
+  public get height() {
+    return window.innerHeight * 0.4;
+  }
+
   // chart options
-  view: [number, number] = [this.width, 400];
+  view: [number, number] = [this.width, this.height];
   xAxisLabel: string = 'Date';
   yAxisLabel: string = 'Rate';
   legend: boolean = false;

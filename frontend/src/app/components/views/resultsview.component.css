@@ -1,3 +1,8 @@
 .card-mouseover {
   background-color: #e6e6e6;
 }
+
+.listing-container {
+  overflow-y: scroll;
+  height: 50vh;
+}
